@@ -4,7 +4,7 @@ import os
 
 web = "http://jxxt.sues.edu.cn/eams/index.action"
 code_path = '/Users/apple/Desktop/IDCode.png'
-data = {'loginForm.name': '021718120', 'loginForm.password': 'Laomengan39!'}
+data = {'loginForm.name': '021718120', 'loginForm.password': 'Laomengan39!', 'encodedPassword': ""}
 code_src = 'http://jxxt.sues.edu.cn/eams/captcha/image.action'
 headers = {'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3',
           'Accept-Encoding': 'gzip, deflate',
