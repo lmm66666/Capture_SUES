@@ -59,7 +59,7 @@ def login(code):
     return soup
 
 
-#getHTMLText()
+getHTMLText()
 save_image()
 code = analysis_image()
 html = login(code)
