@@ -5,6 +5,7 @@ import time
 
 web = "http://jxxt.sues.edu.cn/eams/index.action"
 code_path = '/Users/apple/Desktop/IDCode.png'
+course_path = '/Users/apple/Desktop/course.txt'
 data = {'loginForm.name': '021718120', 'loginForm.password': 'Laomengan39!', 'encodedPassword': ""}
 code_src = 'http://jxxt.sues.edu.cn/eams/captcha/image.action'
 headers = {'Referer': 'http://jxxt.sues.edu.cn/eams/login.action',
@@ -50,11 +51,30 @@ def login(code):
     return soup
 
 
+def get_course():
+    r = session.get('http://jxxt.sues.edu.cn/eams/courseTableForStd.action?method=courseTable&'
+                    'setting.forSemester=1&setting.kind=std&semester.id=422&ids=72146903&ignoreHead=1')
+    print(r.status_code)
+    r.raise_for_status()
+    r.encoding = r.apparent_encoding
+    soup = bs4.BeautifulSoup(r.text, "html.parser")
+    if os.path.exists(course_path):
+        os.remove(course_path)
+    with open(course_path, 'w') as f:
+        f.write(soup.text)
+        f.close()
+        print('Succceed!')
+    return soup
+
+
 session = requests.session()
 getHTMLText()
 save_image()
 code = analysis_image()
-html = login(code)
+login(code)
+html = get_course()
 print(html)
+
+
 
 
