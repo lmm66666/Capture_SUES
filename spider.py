@@ -2,6 +2,7 @@ import requests
 import bs4
 import os
 import time
+import re
 
 web = "http://jxxt.sues.edu.cn/eams/index.action"
 code_path = '/Users/apple/Desktop/IDCode.png'
@@ -11,6 +12,7 @@ code_src = 'http://jxxt.sues.edu.cn/eams/captcha/image.action'
 headers = {'Referer': 'http://jxxt.sues.edu.cn/eams/login.action',
            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) '
            'Chrome/75.0.3770.100 Safari/537.36'}
+course_list = []
 
 
 def getHTMLText():
@@ -58,14 +60,23 @@ def get_course():
     r.raise_for_status()
     r.encoding = r.apparent_encoding
     soup = bs4.BeautifulSoup(r.text, "html.parser")
-    if os.path.exists(course_path):
-        os.remove(course_path)
-    with open(course_path, 'w') as f:
-        f.write(soup.text)
-        f.close()
-        print('Succceed!')
-    return soup
+    # if os.path.exists(course_path):
+    #     os.remove(course_path)
+    # with open(course_path, 'w') as f:
+    #     f.write(soup.text)
+    #     f.close()
+    #     print('Succceed!')
+    return soup.text
 
+
+def progress_course(html):
+    re_course = '(("\S+",){6})'
+    m = re.findall(re_course, html)
+    for i in m:
+        if not (i in course_list):
+            course_list.append(i)
+    for i in course_list:
+        print(i)
 
 session = requests.session()
 getHTMLText()
@@ -73,7 +84,7 @@ save_image()
 code = analysis_image()
 login(code)
 html = get_course()
-print(html)
+progress_course(html)
 
 
 
