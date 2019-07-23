@@ -46,7 +46,6 @@ def login(code):
     data['loginForm.captcha'] = code
     print(data)
     r = session.post('http://jxxt.sues.edu.cn/eams/login.action', data=data, headers=headers)
-    print(r.status_code)
     r.raise_for_status()
     r.encoding = r.apparent_encoding
     soup = bs4.BeautifulSoup(r.text, "html.parser")
@@ -70,13 +69,20 @@ def get_course():
 
 
 def progress_course(html):
+    temp = []
     re_course = '(("\S+",){6})'
     m = re.findall(re_course, html)
     for i in m:
-        if not (i in course_list):
-            course_list.append(i)
+        if not (i in temp):
+            temp.append(i)
+    for i in temp:
+        str = ''.join(i)
+        temp1 = str.split(',')
+        temp2 = temp1[1] + temp1[3] + temp1[-2]
+        course_list.append(temp2)
     for i in course_list:
         print(i)
+
 
 session = requests.session()
 getHTMLText()
