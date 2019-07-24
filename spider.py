@@ -70,18 +70,20 @@ def get_course():
 
 def progress_course(html):
     temp = []
-    re_course = '(("\S+",){6})'
+    re_course = '(("\S+",){6}"[0-1]{53}")'
     m = re.findall(re_course, html)
+    print(m)
     for i in m:
-        if not (i in temp):
-            temp.append(i)
+        if not (i[0] in temp):
+            temp.append(i[0])
     for i in temp:
         str = ''.join(i)
         temp1 = str.split(',')
-        temp2 = temp1[1] + temp1[3] + temp1[-2]
+        temp2 = temp1[1] + temp1[3] + temp1[-2] + temp1[-1]
         course_list.append(temp2)
     for i in course_list:
         print(i)
+
 
 
 session = requests.session()
