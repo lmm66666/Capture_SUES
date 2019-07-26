@@ -70,19 +70,26 @@ def get_course():
 
 def progress_course(html):
     temp = []
-    re_course = '(("\S+",){6}"[0-1]{53}")'
+    re_course = '(("\S+",){6}"[0-1]{53}"\);[\s\S]*?new)'
     m = re.findall(re_course, html)
-    print(m)
     for i in m:
         if not (i[0] in temp):
             temp.append(i[0])
     for i in temp:
         str = ''.join(i)
-        temp1 = str.split(',')
-        temp2 = temp1[1] + temp1[3] + temp1[-2] + temp1[-1]
-        course_list.append(temp2)
-    for i in course_list:
-        print(i)
+        raw_data = str.split(',')
+        data = raw_data[1] + raw_data[3] + raw_data[5]
+        raw_data = raw_data[6].split(';');
+        data += raw_data[0]
+        time = []
+        for j in len(raw_data[1::2])-1:
+            print(data[0], i[j][10])
+            time.append([i[j][10], i[j][-1]])
+        print(time)
+
+    #     course_list.append(temp2)
+    # for i in course_list:
+    #     print(i)
 
 
 
