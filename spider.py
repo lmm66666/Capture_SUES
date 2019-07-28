@@ -76,16 +76,24 @@ def progress_course(html):
         if not (i[0] in temp):
             temp.append(i[0])
     for i in temp:
-        str = ''.join(i)
-        raw_data = str.split(',')
+        raw_data = ''.join(i)
+        raw_data = raw_data.split(',')
         data = raw_data[1] + raw_data[3] + raw_data[5]
-        raw_data = raw_data[6].split(';');
-        data += raw_data[0]
-        time = []
-        for j in len(raw_data[1::2])-1:
-            print(data[0], i[j][10])
-            time.append([i[j][10], i[j][-1]])
-        print(time)
+        raw_data = raw_data[6].split(';')
+        data += raw_data[0][:-1]
+        for j in raw_data[1::2]:
+            m = re.findall('\d+', j)
+            num = 0
+            for i in m:
+                t = int(i) + 1
+                if(num % 2) == 0:
+                    time = '星期' + str(t)
+                    data += time
+                else:
+                    time = '第' + str(t) + '节'
+                    data += time
+                num += 1
+        print(data)
 
     #     course_list.append(temp2)
     # for i in course_list:
