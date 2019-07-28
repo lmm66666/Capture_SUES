@@ -12,7 +12,6 @@ code_src = 'http://jxxt.sues.edu.cn/eams/captcha/image.action'
 headers = {'Referer': 'http://jxxt.sues.edu.cn/eams/login.action',
            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) '
            'Chrome/75.0.3770.100 Safari/537.36'}
-course_list = []
 
 
 def getHTMLText():
@@ -69,6 +68,7 @@ def get_course():
 
 
 def progress_course(html):
+    course_table = []
     temp = []
     re_course = '(("\S+",){6}"[0-1]{53}"\);[\s\S]*?new)'
     m = re.findall(re_course, html)
@@ -78,27 +78,24 @@ def progress_course(html):
     for i in temp:
         raw_data = ''.join(i)
         raw_data = raw_data.split(',')
-        data = raw_data[1] + raw_data[3] + raw_data[5]
+        course = {'teacher': raw_data[1][1:-1], 'course_name': raw_data[3][1:-1], 'location': raw_data[5][1:-1]}
         raw_data = raw_data[6].split(';')
-        data += raw_data[0][:-1]
+        course['week'] = raw_data[0][1:-2]
         for j in raw_data[1::2]:
             m = re.findall('\d+', j)
             num = 0
+            time = ''
             for i in m:
                 t = int(i) + 1
                 if(num % 2) == 0:
-                    time = '星期' + str(t)
-                    data += time
+                    time += '星期' + str(t)
                 else:
-                    time = '第' + str(t) + '节'
-                    data += time
+                    time += '第' + str(t) + '节'
                 num += 1
-        print(data)
-
-    #     course_list.append(temp2)
-    # for i in course_list:
-    #     print(i)
-
+                course['time'] = time
+        course_table.append(course)
+    for i in course_table:
+        print(i)
 
 
 session = requests.session()
