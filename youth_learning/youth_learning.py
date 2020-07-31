@@ -3,8 +3,11 @@ import time
 import json
 import random
 
-
-standard_time = '2020-07-06 14:54:23'   # example 2020-07-05 14:54:23
+'''
+the start time of youth learning (example 2020-07-05 14:54:23) 
+如果用户的上次登录时间晚于青年大学习开始时间，则证明他已完成本次大学习
+'''
+standard_time = '2020-07-06 14:54:23' 
 headers = {
     'User-Agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 13_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobi'
                   'le/15E148 MicroMessenger/7.0.13(0x17000d29) NetType/WIFI Language/zh_CN',
@@ -21,23 +24,23 @@ url_study = 'http://qcsh.h5yunban.com/youth-learning/cgi-bin/user-api/course/joi
 params_login = {
     'callback': 'http://qcsh.h5yunban.com/youth-learning/index.php',
     'scope': 'snsapi_userinfo',
-    'appid': 'wxa693f4127cc93fad',                  # maybe change
-    'openid': 'okMqsjhKU_fNU09xLr-BejOqVw5c',       # change
-    'nickname': 'random',                           # change
-    'heading': 'http://thirdwx.qlogo.cn/mmopen/vi_32/E7XLbDS0gRJibYGpzxcEwXibyTwQAAHX9Koia7oln1821c8Djkibtpf6O20J3nacpnb0pg1UmtpdfDznHYBZvL78kw/132',          # change
-    'time': '10',                                   # change
+    'appid': '',                                   
+    'openid': '',                                  
+    'nickname': 'random',                           # random 
+    'heading': 'http://thirdwx.qlogo.cn/mmopen/vi_32/E7XLbDS0gRJibYGpzxcEwXibyTwQAAHX9Koia7oln1821c8Djkibtpf6O20J3nacpnb0pg1UmtpdfDznHYBZvL78kw/132',     # random
+    'time': '10',                                   
     'source': 'common',
-    'sign': 'F12500A046DFD870500E3370F30C5689',     # change
-    't': 'time'                                     # change
+    'sign': 'F12500A046DFD870500E3370F30C5689',     # random
+    't': 'time' 
 }
 params_last_info = {
-    'accessToken': 'A6DA2ED4-1B61-4591-9D40-F2348221E2EC'
+    'accessToken': 'A6DA2ED4-1B61-4591-9D40-F2348221E2EC'       # get from response
 }
 params_study = {
     'accessToken': 'A6DA2ED4-1B61-4591-9D40-F2348221E2EC'
 }
 data_study = {
-    'course': 'C0155',
+    'course': 'C0155',                  # change（大学习期号）
     'subOrg': None,
     'nid': 'N0001001900021024',         # 学校+班级
     'cardNo': 'lmm'                     # 姓名或学号
@@ -45,6 +48,7 @@ data_study = {
 
 
 def visit_login(s, openid, info):
+    # get token
     params_login['openid'] = openid
     params_login['nickname'] = rand_nickname()
     params_login['time'] = str(get_time())
@@ -52,6 +56,7 @@ def visit_login(s, openid, info):
     params_login['sign'] = rand_sign()
     params_login['heading'] = rand_heading()
     r = s.get(url_login, headers=headers, params=params_login)
+    # get token
     token = r.text[45:81]
     print("token:", token)
     info['token'] = token
@@ -59,6 +64,7 @@ def visit_login(s, openid, info):
 
 
 def visit_last_info(s, token, info):
+    # get last visit info
     params_last_info["accessToken"] = token
     r = s.get(url=url_last_info, params=params_last_info)
     f = do_or_not(r, info)
@@ -66,6 +72,7 @@ def visit_last_info(s, token, info):
 
 
 def visit_study(s, token, class_num, name, info):
+    # useless func
     params_study["accessToken"] = token
     data_study['cardNo'] = name
     num = get_nid(class_num)
@@ -86,15 +93,15 @@ def study(class_num, openid, name, info):
 
 
 def main():
-    for i in range(2, 3):
-        info = {}
-        openid = 'okMqsjhKU_fNU09xLr-BejOqVw5c'
-        print('openid', openid)
-        info["openid"] = openid
-        name = '哈' * i
-        study("延毕、出国境等留校学生团支部", openid, name, info)
-        time.sleep(0.3)
-        save_info(info)
+    info = {}
+    openid = ''     # your openid
+    appid = ''      # your appid   
+    info["openid"] = openid
+    info['appid'] = appid
+    name = '哈' * i
+    study("延毕、出国境等留校学生团支部", openid, name, info)
+    time.sleep(0.3)
+    save_info(info)
 
 
 def success_or_not(r):
