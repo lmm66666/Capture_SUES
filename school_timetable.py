@@ -7,7 +7,7 @@ import re
 web = "http://jxxt.sues.edu.cn/eams/index.action"
 code_path = '/Users/apple/Desktop/IDCode.png'
 course_path = '/Users/apple/Desktop/course.txt'
-data = {'loginForm.name': '021718120', 'loginForm.password': 'Laomengan39!', 'encodedPassword': ""}
+data = {'loginForm.name': '', 'loginForm.password': '', 'encodedPassword': ""}
 code_src = 'http://jxxt.sues.edu.cn/eams/captcha/image.action'
 headers = {'Referer': 'http://jxxt.sues.edu.cn/eams/login.action',
            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_5) AppleWebKit/537.36 (KHTML, like Gecko) '
